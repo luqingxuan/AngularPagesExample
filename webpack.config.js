@@ -37,10 +37,11 @@ var globalEntrys = function(entrys) {
 
 	entrys['angular-dep'] = [ 'core-js', 'reflect-metadata', 'rxjs', 'zone.js' ];
 
-	entrys['angular'] = [ '@angular/core', '@angular/common',
-			'@angular/compiler' ];
+	entrys['angular'] = [ '@angular/core', '@angular/common' ];
 
-	entrys['angular-extra'] = [ '@angular/http', '@angular/platform-browser',
+	entrys['angular-compiler'] = [ '@angular/compiler' ];
+
+	entrys['angular-plugins'] = [ '@angular/http', '@angular/platform-browser',
 			'@angular/platform-browser-dynamic', '@angular/router',
 			'@angular/router-deprecated', '@angular/upgrade',
 			'angular2-in-memory-web-api' ];
@@ -48,8 +49,8 @@ var globalEntrys = function(entrys) {
 	entrys['bootstrap'] = [ 'bootstrap-webpack!./bootstrap.config.js' ];
 
 	plugins.push(new CommonsChunkPlugin({// 注意顺序
-		name : [ 'angular-extra', 'angular', 'angular-dep', 'bootstrap',
-				'moment', 'jquery' ],
+		name : [ 'angular-plugins', 'angular-compiler', 'angular',
+				'angular-dep', 'bootstrap', 'moment', 'jquery' ],
 		minChunks : Infinity
 	}));
 
@@ -247,14 +248,18 @@ module.exports = {
 			}
 		}
 	},
-	devtool : 'eval-source-map'
+	devtool : 'source-map'
 }
 
 if (process.env.NODE_ENV === 'production') {
-	module.exports.devtool = 'source-map'
 	// http://vuejs.github.io/vue-loader/workflow/production.html
-	module.exports.plugins = (module.exports.plugins || []).concat([
-			new webpack.optimize.UglifyJsPlugin({
+	module.exports.plugins = plugins.concat(
+			new webpack.optimize.OccurenceOrderPlugin(),
+			new webpack.DefinePlugin({
+				"process.env" : {
+					"NODE_ENV" : JSON.stringify("production")
+				}
+			}), new webpack.optimize.UglifyJsPlugin({
 				mangle : {
 					except : [ '$super', '$', 'exports', 'require' ]
 				// 排除关键字
@@ -262,5 +267,5 @@ if (process.env.NODE_ENV === 'production') {
 				compress : {
 					warnings : false
 				}
-			}), new webpack.optimize.OccurenceOrderPlugin() ])
+			}));
 }

@@ -8,8 +8,10 @@
 <script type="text/javascript" src="/assets/js/angular-dep.js"></script>
 <!-- Angular核心依赖 -->
 <script type="text/javascript" src="/assets/js/angular.js"></script>
-<!-- Angular插件依赖 -->
-<script type="text/javascript" src="/assets/js/angular-extra.js"></script>
+<!-- Angular Compiler依赖 -->
+<script type="text/javascript" src="/assets/js/angular-compiler.js"></script>
+<!-- Angular其他依赖 -->
+<script type="text/javascript" src="/assets/js/angular-plugins.js"></script>
 <!-- 其他通用插件依赖 -->
 <script type="text/javascript" src="/assets/js/plugins.js"></script>
 <!-- 项目需要依赖 -->
