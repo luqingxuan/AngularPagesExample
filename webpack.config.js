@@ -34,16 +34,16 @@ var globalEntrys = function(entrys) {
 
 	entrys['moment'] = [ 'moment' ];
 
-	entrys['angular-dep'] = [ 'core-js', 'reflect-metadata', 'rxjs', 'zone.js' ];
+	entrys['angular-dep'] = [ 'core-js', 'zone.js', 'reflect-metadata', 'rxjs' ];
 
-	entrys['angular'] = [ '@angular/core', '@angular/common' ];
+	entrys['angular'] = [ '@angular/common', '@angular/core' ];
 
 	entrys['angular-compiler'] = [ '@angular/compiler' ];
 
-	entrys['angular-vendors'] = [ '@angular/http', '@angular/platform-browser',
-			'@angular/platform-browser-dynamic', '@angular/router',
-			'@angular/router-deprecated', '@angular/upgrade',
-			'angular2-in-memory-web-api' ];
+	entrys['angular-vendors'] = [ '@angular/forms', '@angular/http',
+			'@angular/platform-browser', '@angular/platform-browser-dynamic',
+			'@angular/router', '@angular/router-deprecated',
+			'@angular/upgrade', 'angular2-in-memory-web-api' ];
 
 	entrys['bootstrap'] = [ 'bootstrap-webpack!./bootstrap.config.js' ];
 
@@ -117,6 +117,11 @@ var loaders = [
 		{
 			test : /\.js?$/,
 			loaders : [ 'es3ify', 'babel?presets[]=es2015,presets[]=stage-2' ],
+			exclude : /node_modules/
+		},
+		{
+			test : /\.ts$/,
+			loader : 'awesome-typescript-loader',
 			exclude : /node_modules/
 		},
 		{

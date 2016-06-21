@@ -1,13 +1,16 @@
 import {Component,Class} from '@angular/core';
 import {bootstrap} from '@angular/platform-browser-dynamic';
 
+import HelloWorld from 'components/HelloWorld.ts';
+
 require('css/pages/index.css');
 
 (function(app) {
   app.AppComponent =
     Component({
-      selector: 'my-app',
-      template: '<h1>My First Angular 2 App</h1>'
+      selector: 'app',
+      template: 'App:<hello-world></hello-world>',
+      directives:[HelloWorld]
     })
     .Class({
       constructor: function() {}
