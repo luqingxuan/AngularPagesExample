@@ -41,7 +41,7 @@ var globalEntrys = function(entrys) {
 
 	entrys['angular-compiler'] = [ '@angular/compiler' ];
 
-	entrys['angular-plugins'] = [ '@angular/http', '@angular/platform-browser',
+	entrys['angular-vendors'] = [ '@angular/http', '@angular/platform-browser',
 			'@angular/platform-browser-dynamic', '@angular/router',
 			'@angular/router-deprecated', '@angular/upgrade',
 			'angular2-in-memory-web-api' ];
@@ -49,7 +49,7 @@ var globalEntrys = function(entrys) {
 	entrys['bootstrap'] = [ 'bootstrap-webpack!./bootstrap.config.js' ];
 
 	plugins.push(new CommonsChunkPlugin({// 注意顺序
-		name : [ 'angular-plugins', 'angular-compiler', 'angular',
+		name : [ 'angular-vendors', 'angular-compiler', 'angular',
 				'angular-dep', 'bootstrap', 'moment', 'jquery' ],
 		minChunks : Infinity
 	}));
