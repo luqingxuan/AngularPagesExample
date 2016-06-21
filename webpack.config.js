@@ -20,8 +20,7 @@ new webpack.ProvidePlugin({
 	jQuery : "jquery",
 	"window.jQuery" : "jquery",
 	"Cookies" : "js-cookie",
-	moment : "moment",
-	ng : '@angular/core'
+	moment : "moment"
 }),
 // CSS文件放置在CSS目录
 new ExtractTextPlugin("./css/[name].css") ];
