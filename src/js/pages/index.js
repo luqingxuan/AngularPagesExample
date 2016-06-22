@@ -3,6 +3,8 @@ import {bootstrap} from '@angular/platform-browser-dynamic';
 
 import HelloWorld from 'components/HelloWorld.ts';
 
+import Img from 'images/alert.png';
+
 require('css/pages/index.css');
 
 (function(app) {
