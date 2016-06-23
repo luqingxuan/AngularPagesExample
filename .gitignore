@@ -1,4 +1,5 @@
 assets
+dist
 build
 node_modules
 typings
