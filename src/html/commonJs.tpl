@@ -5,7 +5,7 @@
 <!-- Bootstrap依赖 -->
 <script type="text/javascript" src="/assets/js/bootstrap.js"></script>
 <!-- Angular外部依赖 -->
-<script type="text/javascript" src="/assets/js/angular-dep.js"></script>
+<script type="text/javascript" src="/assets/js/angular-polyfill.js"></script>
 <!-- Angular核心依赖 -->
 <script type="text/javascript" src="/assets/js/angular.js"></script>
 <!-- Angular Compiler依赖 -->

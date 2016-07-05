@@ -19,10 +19,7 @@ new webpack.ProvidePlugin({
 	$ : "jquery",
 	jQuery : "jquery",
 	"window.jQuery" : "jquery",
-	Cookie : "js-cookie",
-	moment : "moment",
-	Moment : "moment",
-	Accounting : "accounting"
+	moment : "moment"
 }),
 // CSS文件放置在CSS目录
 new ExtractTextPlugin("./assets/css/[name].css") ];
@@ -36,7 +33,8 @@ var globalEntrys = function(entrys) {
 
 	entrys['moment'] = [ 'moment' ];
 
-	entrys['angular-dep'] = [ 'core-js', 'zone.js', 'reflect-metadata', 'rxjs' ];
+	entrys['angular-polyfill'] = [ 'core-js', 'zone.js', 'reflect-metadata',
+			'rxjs' ];
 
 	entrys['angular'] = [ '@angular/common', '@angular/core' ];
 
