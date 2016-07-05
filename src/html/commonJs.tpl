@@ -11,7 +11,7 @@
 <!-- Angular Compiler依赖 -->
 <script type="text/javascript" src="/assets/js/angular-compiler.js"></script>
 <!-- Angular其他依赖 -->
-<script type="text/javascript" src="/assets/js/angular-vendors.js"></script>
+<script type="text/javascript" src="/assets/js/angular-platform.js"></script>
 <!-- 其他通用插件依赖 -->
 <script type="text/javascript" src="/assets/js/plugins.js"></script>
 <!-- 项目需要依赖 -->
