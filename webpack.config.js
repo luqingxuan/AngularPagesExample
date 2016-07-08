@@ -45,11 +45,9 @@ var globalEntrys = function(entrys) {
 			'@angular/router', '@angular/router-deprecated',
 			'@angular/upgrade', 'angular2-in-memory-web-api' ];
 
-	entrys['bootstrap'] = [ 'bootstrap-webpack!./bootstrap.config.js' ];
-
 	plugins.push(new CommonsChunkPlugin({// 注意顺序
 		name : [ 'angular-platform', 'angular-compiler', 'angular',
-				'angular-polyfill', 'bootstrap', 'moment', 'jquery' ],
+				'angular-polyfill', 'moment', 'jquery' ],
 		minChunks : Infinity
 	}));
 
