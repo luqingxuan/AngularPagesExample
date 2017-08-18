@@ -9,11 +9,11 @@ module.exports = {
     context: __dirname,
     entry: entries,
     output: {
-        path: path.resolve(__dirname, './dist'),
         // 添加http访问上下文路径
         publicPath: '/',
         // 生成文件放到assets目录下的js文件夹
         filename: './assets/js/[name].js'
+        path: path.resolve(__dirname, './dist'),
     },
     plugins: [
         new(require('extract-text-webpack-plugin'))({ // 提取公用CSS
