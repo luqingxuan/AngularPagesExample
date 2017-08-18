@@ -1,4 +1,4 @@
-require('@/bootstrap.config.js');
+require('bootstrap-loader/extractStyles');
 
 // Bootstrap File插件
 require('bootstrap-filestyle');
