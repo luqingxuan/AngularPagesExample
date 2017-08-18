@@ -1,269 +1,67 @@
-var path = require('path');
+const developmentEnv = require('./env.json').development;
 
-var glob = require('glob');
+// 域名
+const webServerDomain = developmentEnv.domain;
 
-var webpack = require('webpack');
+// 端口
+const webServerPort = developmentEnv.port;
 
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
+// 后台API服务器
+const apiServer = developmentEnv.apiServer;
 
-var CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin');
+const webpack = require('webpack');
 
-// CSS浏览器前缀问题
-var autoprefixer = require('autoprefixer');
+const extend = require('extend');
 
-var precss = require('precss');
+const DashboardPlugin = require('webpack-dashboard/plugin');
 
-var plugins = [
-    // 全局依赖,根据需要补充
-    new webpack.ProvidePlugin({
-        $: 'jquery',
-        jQuery: 'jquery',
-        'window.jQuery': 'jquery',
-        moment: 'moment'
-    }),
-    // CSS文件放置在CSS目录
-    new ExtractTextPlugin('./assets/css/[name].css')
-];
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-// 全局性依赖，手动配置
-var globalEntrys = function(entrys) {
+const defaults = require('./webpack.common.config.js');
+const config = extend(true, {}, defaults);
 
-    entrys = entrys || {};
+config.module = config.module || {};
 
-    entrys['jquery'] = ['jquery'];
+config.module.rules = config.module.rules || [];
+config.module.rules.push({
+    test: /\.tsx?$/,
+    exclude: /node_modules/,
+    use: [{
+        loader: 'ts-loader'
+    }]
+});
 
-    entrys['moment'] = ['moment'];
+config.plugins = config.plugins || [];
 
-    entrys['angular-polyfill'] = ['core-js', 'zone.js', 'reflect-metadata',
-        'rxjs'
-    ];
+// webpack-dev-server enhancement plugins
+config.plugins.push(new DashboardPlugin());
+config.plugins.push(new webpack.NamedModulesPlugin());
+config.plugins.push(new webpack.HotModuleReplacementPlugin());
 
-    entrys['angular'] = ['@angular/common', '@angular/core'];
+// for (var key in config.entry) {
+//     if (!config.entry.hasOwnProperty(key))
+//         continue;
 
-    entrys['angular-compiler'] = ['@angular/compiler'];
+//     if (!(config.entry[key] instanceof Array))
+//         config.entry[key] = [config.entry[key]];
 
-    entrys['angular-platform'] = ['@angular/forms', '@angular/http',
-        '@angular/platform-browser', '@angular/platform-browser-dynamic',
-        '@angular/router', '@angular/router-deprecated',
-        '@angular/upgrade', 'angular2-in-memory-web-api'
-    ];
+//     config.entry[key].unshift('webpack/hot/dev-server');
+//     config.entry[key].unshift('webpack-dev-server/client/?http://' + webServerDomain + ':' + webServerPort);
+// }
 
-    plugins.push(new CommonsChunkPlugin({ // 注意顺序
-        name: ['angular-platform', 'angular-compiler', 'angular',
-            'angular-polyfill', 'moment', 'jquery'
-        ],
-        minChunks: Infinity
-    }));
-
-    return entrys;
-}
-
-// 通用依赖，在common目录
-var commonEntrys = function(entrys) {
-
-    entrys = entrys || {};
-
-    var src = new RegExp(__dirname.replace(/\\/g, '/') + '/src/js/common/');
-
-    glob.sync(__dirname + '/src/js/common/**/*.js').forEach(function(name) {
-
-        // 前缀
-        var entry = name.replace(src, '');
-
-        // 后缀
-        entry = entry.replace(/\.js$/, '');
-
-        entrys[entry] = [name];
-
-    });
-
-    return entrys;
-};
-
-// 具体页面
-var pageEntrys = function(entrys) {
-
-    entrys = entrys || {};
-
-    var src = new RegExp(__dirname.replace(/\\/g, '/') + '/src/js/pages/');
-
-    glob.sync(__dirname + '/src/js/pages/**/*.js').forEach(function(name) {
-
-        // 前缀
-        var entry = name.replace(src, '');
-
-        // 后缀
-        entry = entry.replace(/\.js$/, '');
-
-        entrys[entry] = [name];
-
-    });
-
-    return entrys;
-};
-
-var entrys = function() {
-
-    var entrys = {};
-
-    globalEntrys(entrys);
-
-    commonEntrys(entrys);
-
-    pageEntrys(entrys);
-
-    return entrys;
-};
-
-var loaders = [{
-    test: /\.ts$/,
-    loader: 'awesome-typescript-loader',
-    exclude: /node_modules/
-}, {
-    test: /\.js$/,
-    loaders: ['es3ify', 'babel'],
-    exclude: /node_modules/
-}, {
-    test: /\.json$/,
-    loader: 'json'
-}, {
-    test: /\.(png|jpg|gif)$/,
-    loader: 'url',
-    query: {
-        limit: 10000,
-        // CSS图片目录
-        name: 'assets/images/[name].[ext]'
-    }
-}, {
-    test: /\.less$/,
-    loader: ExtractTextPlugin.extract('style-loader',
-        'css-loader!postcss-loader!less-loader')
-}, {
-    test: /\.scss$/,
-    loader: ExtractTextPlugin.extract('style-loader',
-        'css-loader!postcss-loader!sass-loader')
-}, {
-    test: /\.css$/,
-    loader: ExtractTextPlugin.extract('style-loader',
-        'css-loader!postcss-loader')
-}, {
-    test: /\.(woff|woff2)(\?v=\S+)?$/,
-    loader: 'url',
-    query: {
-        limit: 10000,
-        mimetype: 'application/font-woff',
-        // 字体文件放置目录
-        name: 'assets/font/[name].[ext]'
-    }
-}, {
-    test: /\.ttf(\?v=\S+)?$/,
-    loader: 'url',
-    query: {
-        limit: 10000,
-        mimetype: 'application/octet-stream',
-        // 字体文件放置目录
-        name: 'assets/font/[name].[ext]'
-    }
-}, {
-    test: /\.eot(\?v=\S+)?$/,
-    loader: 'file',
-    query: {
-        limit: 10000,
-        // 字体文件放置目录
-        name: 'assets/font/[name].[ext]'
-    }
-}, {
-    test: /\.svg(\?v=\S+)?$/,
-    loader: 'url',
-    query: {
-        limit: 10000,
-        mimetype: 'application/image/svg+xml',
-        // 字体文件放置目录
-        name: 'assets/font/[name].[ext]'
-    }
-}, { // 如果要加载jQuery插件,解析路径&参数
-    test: '/src/js/components/jquery/**/*.js$',
-    loader: 'imports?jQuery=jquery,$=jquery,this=>window'
-}];
-
-module.exports = {
-    context: __dirname,
-    entry: entrys(),
-    output: {
-        // 生成文件放到assets文件夹
-        path: path.resolve(__dirname, './dist'),
-        // 添加http访问上下文路径
-        publicPath: '/',
-        // JS文件放到js文件夹
-        filename: './assets/js/[name].js'
-    },
-    resolveLoader: {
-        root: path.join(__dirname, 'node_modules')
-    },
-    resolve: {
-        root: [path.join(__dirname, 'src'),
-            path.join(__dirname, 'node_modules')
-        ],
-        // 自动扩展文件后缀名，意味着我们require模块可以省略不写后缀名
-        extensions: ['', '.js', 'jsx', '.json', '.scss'],
-        // 模块别名定义，方便后续直接引用别名，无须多写长长的地址
-        alias: {
-            root: path.resolve(''),
-            js: path.resolve('src/js'),
-            shim: path.resolve('src/js/shim'),
-            css: path.resolve('src/css'),
-            images: path.resolve('src/images'),
-            modules: path.resolve('node_modules'),
-            components: path.resolve('src/js/components')
+// inject env
+config.plugins.push(
+    new webpack.DefinePlugin({
+        'process.env': {
+            'NODE_ENV': JSON.stringify('development'),
+            'API_SERVER': JSON.stringify(apiServer)
         }
-    },
-    // 当我们想在项目中require一些其他的类库或者API，而又不想让这些类库的源码被构建到运行时文件中
-    // 通过引用外部文件的方式引入第三方库 via script tag
-    externals: {
-        // 'jquery' : 'jQuery'
-        // moment: true
-    },
-    noParse: [ // 如果你 确定一个模块中没有其它新的依赖 就可以配置这项，webpack 将不再扫描这个文件中的依赖
-    ],
-    plugins: plugins,
-    module: {
-        loaders: loaders
-    },
-    postcss: function() {
-        return [autoprefixer({
-            browsers: ['not ie <= 8']
-        }), precss];
-    },
-    devServer: {
-        contentBase: './dist',
-        historyApiFallback: true,
-        noInfo: true,
-        // 其实很简单的，只要配置这个参数就可以了
-        proxy: {
-            '/v1/*': {
-                target: 'http://localhost:3000/',
-                secure: false
-            }
-        }
-    },
-    devtool: 'source-map'
-}
+    })
+);
 
-if (process.env.NODE_ENV === 'production') {
-    // http://vuejs.github.io/vue-loader/workflow/production.html
-    module.exports.plugins = plugins.concat(
-        new webpack.optimize.OccurenceOrderPlugin(),
-        new webpack.DefinePlugin({
-            'process.env': {
-                'NODE_ENV': JSON.stringify('production')
-            }
-        }), new webpack.optimize.UglifyJsPlugin({
-            mangle: {
-                except: ['$super', '$', 'exports', 'require']
-                    // 排除关键字
-            },
-            compress: {
-                warnings: false
-            }
-        }));
-}
+// api proxy for develop
+config.devServer.proxy = developmentEnv.apiProxy;
+
+config.devtool = 'source-map';
+
+module.exports = config;
