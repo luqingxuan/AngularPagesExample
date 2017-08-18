@@ -12,7 +12,7 @@ module.exports = {
         // 添加http访问上下文路径
         publicPath: '/',
         // 生成文件放到assets目录下的js文件夹
-        filename: './assets/js/[name].js'
+        filename: './assets/js/[name].js',
         path: path.resolve(__dirname, './dist'),
     },
     plugins: [

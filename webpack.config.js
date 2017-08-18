@@ -13,10 +13,6 @@ const webpack = require('webpack');
 
 const extend = require('extend');
 
-const DashboardPlugin = require('webpack-dashboard/plugin');
-
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
-
 const defaults = require('./webpack.common.config.js');
 const config = extend(true, {}, defaults);
 
@@ -34,7 +30,7 @@ config.module.rules.push({
 config.plugins = config.plugins || [];
 
 // webpack-dev-server enhancement plugins
-config.plugins.push(new DashboardPlugin());
+config.plugins.push(new(require('webpack-dashboard/plugin'))());
 config.plugins.push(new webpack.NamedModulesPlugin());
 config.plugins.push(new webpack.HotModuleReplacementPlugin());
 

@@ -5,8 +5,6 @@ const webpack = require('webpack');
 
 const extend = require('extend');
 
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
-
 const defaults = require('./webpack.common.config.js');
 const config = extend(true, {}, defaults);
 
