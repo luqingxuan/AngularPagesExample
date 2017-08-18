@@ -15,4 +15,4 @@ require('css/lib/google/css/google.css');
 
 // font-awesome font
 require('font-awesome/scss/font-awesome.scss');
-require('@/font-awesome.config.js');
+require('style-loader!font-awesome-loader!@/font-awesome.config.js');

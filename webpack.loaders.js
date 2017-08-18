@@ -1,25 +1,6 @@
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = [{
-    test: /font-awesome\.config\.js/,
-    use: ['style-loader', 'font-awesome-loader']
-}, { // Bootstrap 4
-    test: /bootstrap\/dist\/js\/umd\//,
-    use: [{
-        loader: 'imports-loader',
-        options: {
-            jQuery: 'jquery'
-        }
-    }]
-}, { // Bootstrap 3
-    test: /bootstrap-sass\/assets\/javascripts\//,
-    use: [{
-        loader: 'imports-loader',
-        options: {
-            jQuery: 'jquery'
-        }
-    }]
-}, {
     test: /\.js$/,
     exclude: /node_modules/,
     use: ['es3ify-loader', 'babel-loader']
@@ -31,19 +12,19 @@ module.exports = [{
     test: /\.css$/,
     use: ExtractTextPlugin.extract({
         fallback: 'style-loader',
-        use: ['css-loader?importLoaders=1', 'postcss-loader']
+        use: ['css-loader', 'postcss-loader']
     })
 }, {
     test: /\.less$/,
     use: ExtractTextPlugin.extract({
         fallback: 'style-loader',
-        use: ['css-loader?importLoaders=1', 'postcss-loader', 'less-loader']
+        use: ['css-loader', 'postcss-loader', 'less-loader']
     })
 }, {
     test: /\.scss$/,
     use: ExtractTextPlugin.extract({
         fallback: 'style-loader',
-        use: ['css-loader?importLoaders=1', 'postcss-loader', 'sass-loader']
+        use: ['css-loader', 'postcss-loader', 'sass-loader']
     })
 }, {
     test: /\.(png|jpg|gif)$/,
