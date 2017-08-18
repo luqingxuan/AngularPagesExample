@@ -64,7 +64,11 @@
     "datatables.net-responsive": "^2.1.0",
     "datatables.net-responsive-bs": "^2.1.0",
     "del": "^2.2.0",
+<<<<<<< HEAD
     "device.js": "git://github.com/matthewhudson/device.js.git",
+=======
+    "device.js": "^0.1.2",
+>>>>>>> 7c9f145907fed173ad84c1b60ff8a06389a49f58
     "es3ify-loader": "^0.2.0",
     "es6-promise": "^3.2.1",
     "exports-loader": "^0.6.3",
@@ -88,6 +92,7 @@
     "gulp-md5-plus": "^0.2.5",
     "gulp-sequence": "^0.4.5",
     "gulp-uglify": "^1.5.3",
+<<<<<<< HEAD
     "hover.css": "git://github.com/IanLunn/Hover.git",
     "imports-loader": "^0.7.1",
     "intl": "^1.2.5",
@@ -95,6 +100,11 @@
     "is_js": "^0.8.0",
     "jasmine-core": "~2.6.2",
     "jasmine-spec-reporter": "~4.1.0",
+=======
+    "hover.css": "^2.0.2",
+    "imports-loader": "^0.6.5",
+    "is_js": "^0.8.0",
+>>>>>>> 7c9f145907fed173ad84c1b60ff8a06389a49f58
     "jquery": "^1.11.0",
     "jquery-confirm": "^1.5.1",
     "jquery-form": "^3.50.0",
