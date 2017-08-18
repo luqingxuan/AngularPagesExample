@@ -1,9 +1,5 @@
 const polyfill = require('./polyfill.js');
 
-const jquery = require('./jquery.js');
-
-const moment = require('./moment.js');
-
 const angular = require('./angular.js');
 
 const plugins = require('./plugins.js');
@@ -20,17 +16,11 @@ for (let it of polyfill) {
     entries[it.id] = it.contains;
 }
 
-for (let it of jquery) {
-    commonChunks.push(it.id);
+commonChunks.push('jquery');
+entries['jquery'] = ['expose-loader?$!expose-loader?jQuery!jquery'];
 
-    entries[it.id] = it.contains;
-}
-
-for (let it of moment) {
-    commonChunks.push(it.id);
-
-    entries[it.id] = it.contains;
-}
+commonChunks.push('moment');
+entries['moment'] = ['expose-loader?moment!moment'];
 
 for (let it of angular) {
     commonChunks.push(it.id);

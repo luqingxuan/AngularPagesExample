@@ -1,10 +1,4 @@
 module.exports = {
-
-    styleLoader: 'style-loader!css-loader!less-loader',
-
-    // Default for the style loading
-    // styleLoader: 'style-loader!css-loader!less-loader',
-
     styles: {
         'mixins': true,
         'bordered-pulled': true,

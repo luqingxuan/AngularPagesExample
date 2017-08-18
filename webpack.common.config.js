@@ -22,6 +22,13 @@ const plugins = [
 ];
 
 const rules = [{
+    test: /font-awesome\.config\.js/,
+    use: [{
+        loader: 'style-loader'
+    }, {
+        loader: 'font-awesome-loader'
+    }, ],
+}, {
     test: /\.js$/,
     exclude: /node_modules/,
     use: ['es3ify-loader', 'babel-loader']
@@ -92,11 +99,12 @@ const rules = [{
             name: 'assets/images/[name].[ext]'
         }
     }]
-}, { // 如果要加载jQuery插件,解析路径&参数
-    test: 'components/jquery/**/*.js$',
-    use: [{
-        loader: 'imports-loader?this=>window,$=jquery'
-    }]
+}, { // Bootstrap 4
+    test: /bootstrap\/dist\/js\/umd\//,
+    use: 'imports-loader?jQuery=jquery'
+}, { // Bootstrap 3
+    test: /bootstrap-sass\/assets\/javascripts\//,
+    use: 'imports-loader?jQuery=jquery'
 }];
 
 module.exports = {

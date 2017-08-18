@@ -30,6 +30,7 @@ config.module.rules.push({
         loader: 'ts-loader'
     }]
 });
+config.entry.jquery.push(require('./bootstrap.js'));
 
 config.plugins = config.plugins || [];
 
