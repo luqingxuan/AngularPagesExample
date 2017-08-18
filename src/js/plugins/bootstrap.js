@@ -1,3 +1,5 @@
+require('@/bootstrap.config.js');
+
 // Bootstrap File插件
 require('bootstrap-filestyle');
 
@@ -8,4 +10,4 @@ require('twbs-pagination');
 require('bootstrap-social');
 
 // Bootstrap dialog
-require('bootstrap3-dialog');
+require('expose-loader?BootstrapDialog!bootstrap3-dialog');
