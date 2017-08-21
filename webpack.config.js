@@ -11,10 +11,7 @@ const apiServer = developmentEnv.apiServer;
 
 const webpack = require('webpack');
 
-const extend = require('extend');
-
-const defaults = require('./webpack.common.config.js');
-const config = extend(true, {}, defaults);
+const config = require('./webpack.common.config.js');
 
 config.module = config.module || {};
 

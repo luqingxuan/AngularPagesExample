@@ -1,5 +1,6 @@
 require('./gulpfile-tasks.js');
-require('./gulpfile-release.js');
+
+require('./gulpfile-prod.js');
 
 const env = require('./env.json').development;
 
@@ -21,7 +22,7 @@ const webpack = require('webpack');
 
 const WebpackDevServer = require('webpack-dev-server');
 
-const webpackDevelopConfig = require('./webpack.config.js');
+const WebpackDevConfig = require('./webpack.config.js');
 
 const uglifyJsPlugin = new webpack.optimize.UglifyJsPlugin({
     mangle: {
@@ -37,38 +38,14 @@ const uglifyJsPlugin = new webpack.optimize.UglifyJsPlugin({
 
 // 开发调试源码环境
 gulp.task('webpack-dev', function(callback) {
-    var webpackConfig = extend(true, {}, webpackDevelopConfig);
-
-    var cfg = {
-        inline: true,
+    var devServer = extend(true, {}, WebpackDevConfig.devServer, {
         hot: true,
-        historyApiFallback: false,
-        contentBase: webpackConfig.devServer.contentBase,
-        publicPath: webpackConfig.output.publicPath,
-        // Set this if you want to enable gzip compression for assets
-        compress: true,
-        // webpack-dev-middleware options
-        // quiet: false,
-        // noInfo: false,
-        lazy: false,
-        stats: {
-            colors: true
-        },
-        watchOptions: {
-            aggregateTimeout: 300,
-            poll: true
-        },
-        headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,OPTIONS',
-            'Access-Control-Allow-Headers': 'Content-Type'
-        },
-        proxy: webpackConfig.devServer.proxy
-    };
+        inline: true
+    });
 
-    var compiler = webpack(webpackConfig);
+    var compiler = webpack(WebpackDevConfig);
 
-    var server = new WebpackDevServer(compiler, cfg);
+    var server = new WebpackDevServer(compiler, devServer);
 
     server.listen(webServerPort, webServerDomain, function(err) {
         console.log('start at ' + webServerDomain + ':' + webServerPort);
@@ -78,37 +55,17 @@ gulp.task('webpack-dev', function(callback) {
 });
 
 gulp.task('webpack-dev-minify', function(callback) {
-    var webpackConfig = extend(true, {}, webpackDevelopConfig);
-
-    var cfg = {
-        inline: true,
+    var devServer = extend(true, {}, WebpackDevConfig.devServer, {
         hot: true,
-        historyApiFallback: false,
-        contentBase: webpackConfig.devServer.contentBase,
-        publicPath: webpackConfig.output.publicPath,
-        // Set this if you want to enable gzip compression for assets
-        compress: true,
-        // webpack-dev-middleware options
-        // quiet: false,
-        // noInfo: false,
-        lazy: false,
-        stats: {
-            colors: true
-        },
-        headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,OPTIONS',
-            'Access-Control-Allow-Headers': 'Content-Type'
-        },
-        proxy: webpackConfig.devServer.proxy
-    };
+        inline: true
+    });
 
     // uglify js file
-    webpackConfig.plugins.push(uglifyJsPlugin);
+    WebpackDevConfig.plugins.push(uglifyJsPlugin);
 
-    var compiler = webpack(webpackConfig);
+    var compiler = webpack(WebpackDevConfig);
 
-    var server = new WebpackDevServer(compiler, cfg);
+    var server = new WebpackDevServer(compiler, devServer);
 
     server.listen(webServerPort, webServerDomain, function(err) {
         console.log('start at ' + webServerDomain + ':' + webServerPort);
