@@ -13,7 +13,7 @@ const gulpSequence = require('gulp-sequence');
 
 const webpack = require('webpack');
 
-const WebpackProdConfig = require('./webpack.prod.config.js');
+const WebpackProdConfig = extend(true, {}, require('./webpack.prod.config.js'));
 
 const uglifyJsPlugin = new webpack.optimize.UglifyJsPlugin({
     mangle: {
@@ -28,7 +28,7 @@ const uglifyJsPlugin = new webpack.optimize.UglifyJsPlugin({
 });
 
 // 正式打包压缩文件
-gulp.task('webpack-build', function(callback) {
+gulp.task('webpack-prod', function(callback) {
     // uglify js file
     WebpackProdConfig.plugins.push(uglifyJsPlugin);
 
@@ -38,26 +38,26 @@ gulp.task('webpack-build', function(callback) {
 });
 
 // 正式打包源码文件
-gulp.task('webpack-build-source', function(callback) {
+gulp.task('webpack-prod-source', function(callback) {
     return webpack(WebpackProdConfig, function(err, stat) {
         callback();
     });
 });
 
 // 正式打包压缩文件
-gulp.task('build', function(callback) {
-    gulpSequence('clean', 'externals', 'shim', 'html-include', 'webpack-build', 'md5',
+gulp.task('prod', function(callback) {
+    gulpSequence('clean', 'externals', 'shim', 'html-include', 'webpack-prod', 'md5',
         'html-minify', callback);
 });
 
 // 正式打包源码文件
-gulp.task('build-source', function(callback) {
-    gulpSequence('clean', 'externals', 'shim', 'html-include', 'webpack-build-source',
+gulp.task('prod-source', function(callback) {
+    gulpSequence('clean', 'externals', 'shim', 'html-include', 'webpack-prod-source',
         'md5', callback);
 });
 
 // dist目录copy至发布目录
-gulp.task('toremote', function(callback) {
+gulp.task('dispatch', function(callback) {
     var src = './dist/**/*.*';
 
     return gulp.src(src).pipe(
@@ -66,10 +66,10 @@ gulp.task('toremote', function(callback) {
 
 // 发布压缩文件
 gulp.task('publish', function(callback) {
-    gulpSequence('build', 'toremote', callback);
+    gulpSequence('prod', 'dispatch', callback);
 });
 
 // 发布未压缩文件
 gulp.task('publish-source', function(callback) {
-    gulpSequence('build-source', 'toremote', callback);
+    gulpSequence('prod-source', 'dispatch', callback);
 });

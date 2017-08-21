@@ -1,19 +1,19 @@
 // API服务器
 const productionEnv = require('./env.json').production;
 
+const extend = require('extend');
+
 const webpack = require('webpack');
 
-const config = require('./webpack.common.config.js');
+const config = extend(true, {}, require('./webpack.common.config.js'));
 
 config.module = config.module || {};
-
 config.module.rules = config.module.rules || [];
+
 config.module.rules.push({
     test: /\.tsx?$/,
     exclude: /node_modules/,
-    use: [{
-        loader: 'ts-loader'
-    }]
+    use: ['ts-loader']
 });
 
 config.plugins = config.plugins || [];

@@ -22,7 +22,7 @@ const webpack = require('webpack');
 
 const WebpackDevServer = require('webpack-dev-server');
 
-const WebpackDevConfig = require('./webpack.config.js');
+const WebpackDevConfig = extend(true, {}, require('./webpack.config.js'));
 
 const uglifyJsPlugin = new webpack.optimize.UglifyJsPlugin({
     mangle: {
