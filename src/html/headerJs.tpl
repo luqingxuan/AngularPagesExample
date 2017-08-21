@@ -1,12 +1,12 @@
 <script type="text/javascript">
 	//iframe ? say no
-	 if (window != top) 
+	 if (window != top)
 	 	top.location.href = location.href;
 
 	//for IE6~IE8,IE10+浏览器已经跟条件注释say goodbye了
 	if (!document.addEventListener)
-	    document.write('<script src="/assets/js/shim.js"><\/script>');	
-	 
+	    document.write('<script src="/assets/js/shim.js"><\/script>');
+
 	// Internet Explorer 10 并没有对 屏幕的宽度 和 视口（viewport）的宽度 进行区分
 	// Copyright 2014-2015 Twitter, Inc.
 	//Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
@@ -21,3 +21,5 @@
 	}
 
 </script>
+
+<script src="http://localhost:8080/webpack-dev-server.js"></script>

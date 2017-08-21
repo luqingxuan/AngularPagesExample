@@ -54,6 +54,10 @@ gulp.task('webpack-dev', function(callback) {
         stats: {
             colors: true
         },
+        watchOptions: {
+            aggregateTimeout: 300,
+            poll: true
+        },
         headers: {
             'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,OPTIONS',

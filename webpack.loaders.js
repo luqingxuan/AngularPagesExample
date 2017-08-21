@@ -4,10 +4,6 @@ module.exports = [{
     test: /\.js$/,
     exclude: /node_modules/,
     use: ['es3ify-loader', 'babel-loader']
-}, { /* Embed files. */
-    test: /\.(html|css)$/,
-    exclude: /node_modules/,
-    use: ['raw-loader']
 }, {
     test: /\.css$/,
     use: ExtractTextPlugin.extract({
@@ -71,4 +67,8 @@ module.exports = [{
             name: 'assets/images/[name].[ext]'
         }
     }]
+}, { /* Embed files. */
+    test: /\.html$/,
+    exclude: /node_modules/,
+    use: ['raw-loader']
 }];

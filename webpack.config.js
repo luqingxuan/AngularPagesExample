@@ -34,17 +34,6 @@ config.plugins.push(new(require('webpack-dashboard/plugin'))());
 config.plugins.push(new webpack.NamedModulesPlugin());
 config.plugins.push(new webpack.HotModuleReplacementPlugin());
 
-// for (var key in config.entry) {
-//     if (!config.entry.hasOwnProperty(key))
-//         continue;
-
-//     if (!(config.entry[key] instanceof Array))
-//         config.entry[key] = [config.entry[key]];
-
-//     config.entry[key].unshift('webpack/hot/dev-server');
-//     config.entry[key].unshift('webpack-dev-server/client/?http://' + webServerDomain + ':' + webServerPort);
-// }
-
 // inject env
 config.plugins.push(
     new webpack.DefinePlugin({

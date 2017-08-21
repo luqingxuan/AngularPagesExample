@@ -1,3 +1,5 @@
+require('./app.component.less');
+
 import { Component, OnInit } from '@angular/core';
 
 import { HeroService } from './hero.service';
@@ -7,7 +9,6 @@ import { Hero } from './hero';
 @Component({
   selector: 'app-root',
   template: require('./app.component.html'),
-  styles: [require('./app.component.css')],
   providers: [HeroService]
 })
 export class AppComponent implements OnInit{
