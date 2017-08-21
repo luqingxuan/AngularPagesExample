@@ -1,6 +1,6 @@
-require('./gulpfile-tasks.js');
+require('./gulpfile.tasks.js');
 
-require('./gulpfile-prod.js');
+require('./gulpfile.prod.js');
 
 const env = require('./env.json').development;
 
