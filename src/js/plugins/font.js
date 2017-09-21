@@ -8,5 +8,4 @@ require('weather-icons/css/weather-icons.css');
 require('css/lib/google/css/google.css');
 
 // font-awesome font
-require('font-awesome/scss/font-awesome.scss');
-require('style-loader!font-awesome-loader!@/font-awesome.config.js');
+require('font-awesome/css/font-awesome.css');

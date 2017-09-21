@@ -17,5 +17,3 @@ require('fetch-polyfill');
 
 6.ES6 Object.assign
 require('core-js/es6/object');
-
-7.npm install && npm run typings install

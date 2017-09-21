@@ -6,8 +6,10 @@ module.exports = {
     css: path.resolve('./src/css'),
     images: path.resolve('./src/images'),
     pages: path.resolve('./src/js/pages'),
+    store: path.resolve('./src/js/store'),
     router: path.resolve('./src/js/router'),
     enhance: path.resolve('./src/js/enhance'),
+    containers: path.resolve('./src/js/containers'),
     modules: path.resolve('./src/js/modules'),
     components: path.resolve('./src/js/components'),
     node_modules: path.resolve('node_modules')

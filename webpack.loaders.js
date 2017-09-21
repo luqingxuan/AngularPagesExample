@@ -1,9 +1,15 @@
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
+const IsProduct = process.env.NODE_ENV === 'production';
+
+var fonts = IsProduct ? 'assets/fonts/[name].[hash:8].[ext]' : 'assets/fonts/[name].[ext]';
+
+var images = IsProduct ? 'assets/images/[name].[hash:8].[ext]' : 'assets/images/[name].[ext]';
+
 module.exports = [{
     test: /\.js$/,
-    exclude: /node_modules/,
-    use: ['es3ify-loader', 'babel-loader']
+    use: ['babel-loader'],
+    exclude: /node_modules/
 }, {
     test: /\.css$/,
     use: ExtractTextPlugin.extract({
@@ -26,49 +32,58 @@ module.exports = [{
     test: /\.(png|jpg|gif)$/,
     use: [{
         loader: 'url-loader',
-        options: { // CSS图片目录
+        options: { // css images
             limit: 10000,
-            name: 'assets/images/[name].[ext]'
+            name: images
         }
     }]
 }, {
     test: /\.(woff|woff2)(\?v=\S+)?$/,
     use: [{
         loader: 'url-loader',
-        options: { // CSS图片目录
+        options: { // css fonts
             limit: 10000,
-            name: 'assets/images/[name].[ext]'
+            name: fonts
         }
     }]
 }, {
     test: /\.ttf(\?v=\S+)?$/,
     use: [{
         loader: 'url-loader',
-        options: { // CSS图片目录
+        options: { // css fonts
             limit: 10000,
-            name: 'assets/images/[name].[ext]'
+            name: fonts
         }
     }]
 }, {
     test: /\.eot(\?v=\S+)?$/,
-    use: [{ // CSS图片目录
+    use: [{ // css fonts
         loader: 'file-loader',
         options: {
             limit: 10000,
-            name: 'assets/images/[name].[ext]'
+            name: fonts
         }
     }]
 }, {
     test: /\.svg(\?v=\S+)?$/,
-    use: [{ // CSS图片目录
+    use: [{ // css fonts
         loader: 'file-loader',
         options: {
             limit: 10000,
-            name: 'assets/images/[name].[ext]'
+            name: fonts
         }
     }]
-}, { /* Embed files. */
+}, {
+    test: /\.ejs$/,
+    use: [{
+        loader: 'ejs-compiled-loader',
+        options: {
+            htmlmin: true
+        }
+    }],
+    exclude: /node_modules/
+}, {
     test: /\.html$/,
-    exclude: /node_modules/,
-    use: ['raw-loader']
+    use: ['raw-loader'],
+    exclude: /node_modules/
 }];

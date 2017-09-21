@@ -16,10 +16,9 @@ const includeTag = require('gulp-include-tag');
 
 const gulpSequence = require('gulp-sequence');
 
-// 纯copy静态资源
-gulp.task('externals', function() {
-    var src = ['./src/externals/**/*.*'];
-    return gulp.src(src).pipe(gulp.dest('./dist/assets/externals'));
+// 清理目录
+gulp.task('clean', function() {
+    return require('del')(['./dist/*']);
 });
 
 // 低版本IE8补丁
@@ -33,18 +32,29 @@ gulp.task('shim', function() {
         gulp.dest('./dist/assets/js'));
 });
 
-// 清理目录
-gulp.task('clean', function() {
-    return require('del')(['./dist/*']);
+// MD5：Css文件中Font引用
+gulp.task('md5-css-fonts', function() {
+    var src = ['./dist/assets/fonts/**/*.*'];
+
+    return gulp.src(src).pipe(md5(8, './dist/assets/css/**/*.css')).pipe(
+        gulp.dest('./dist/assets/fonts'));
 });
 
-// HTML页面include处理
+// MD5：Css文件中Image引用
+gulp.task('md5-css-images', function() {
+    var src = ['./dist/assets/images/**/*.*'];
+
+    return gulp.src(src).pipe(md5(8, './dist/assets/css/**/*.css')).pipe(
+        gulp.dest('./dist/assets/images'));
+});
+
+// HTML页面Include拼接处理
 gulp.task('html-include', function() {
     return gulp.src('./src/html/pages/**/*.html').pipe(includeTag()).pipe(
         gulp.dest('./dist'));
 });
 
-// HTML文件整理
+// HTML文件压缩整理
 gulp.task('html-minify', function() {
     return gulp.src('./dist/**/*.html').pipe(htmlmin({
         collapseWhitespace: true,
@@ -52,55 +62,44 @@ gulp.task('html-minify', function() {
     })).pipe(gulp.dest('./dist'));
 });
 
-// MD5文件后缀命名
-gulp.task('md5-font', function() {
-    var src = ['./dist/assets/font/**/*.*'];
-
-    return gulp.src(src).pipe(md5(8, './dist/assets/css/**/*.css')).pipe(
-        gulp.dest('./dist/assets/font'));
+// Copy ext/images纯静态资源
+gulp.task('html-ext-images', function() {
+    var src = ['./src/ext/images/**/*.*'];
+    return gulp.src(src).pipe(gulp.dest('./dist/assets/ext/images'));
 });
 
-// src目录下copy到dist目录下
-gulp.task('html-images', function() {
-    var src = ['./src/images/**/*.*'];
-
-    return gulp.src(src).pipe(gulp.dest('./dist/assets/images'));
-});
-
-// MD5文件后缀命名
-gulp.task('md5-images', function() {
-    var src = ['./dist/assets/images/**/*.*'];
-
-    return gulp.src(src).pipe(md5(8, './dist/assets/css/**/*.css')).pipe(
-        gulp.dest('./dist/assets/images'));
-});
-
-// MD5文件后缀命名
-gulp.task('md5-html-images', ['html-images'], function() {
-    var src = ['./dist/assets/images/**/*.*'];
+// MD5：HTML文件中Image引用
+gulp.task('md5-html-ext-images', ['html-ext-images'], function() {
+    var src = ['./dist/assets/ext/images/**/*.*'];
 
     return gulp.src(src).pipe(md5(8, './dist/**/*.html')).pipe(
-        gulp.dest('./dist/assets/images'));
+        gulp.dest('./dist/assets/ext/images'));
 });
 
-// MD5文件后缀命名
-gulp.task('md5-css', function() {
+// MD5：HTML文件中Css引用
+gulp.task('md5-html-css', function() {
     var src = ['./dist/assets/css/**/*.css'];
 
     return gulp.src(src).pipe(md5(8, './dist/**/*.html')).pipe(
         gulp.dest('./dist/assets/css'));
 });
 
-// MD5文件后缀命名
-gulp.task('md5-js', function() {
+// MD5：HTML文件中Js引用
+gulp.task('md5-html-js', function() {
     var src = ['./dist/assets/js/**/*.js'];
 
     return gulp.src(src).pipe(md5(8, './dist/**/*.html')).pipe(
         gulp.dest('./dist/assets/js'));
 });
 
+// HTML文件生成
+gulp.task('html', function(callback) {
+    return gulpSequence('clean', 'shim', 'html-include', 'html-ext-images', callback);
+});
+
 // MD5文件后缀命名
 gulp.task('md5', function(callback) {
-    return gulpSequence('md5-images', 'md5-html-images', 'md5-font', 'md5-css',
-        'md5-js', callback);
+    return gulpSequence('md5-html-css',
+        'md5-html-js', 'md5-html-ext-images', 'md5-html-css', 'md5-html-js',
+        'html-minify', callback);
 });

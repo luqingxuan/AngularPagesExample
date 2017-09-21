@@ -1,4 +1,5 @@
-require('bootstrap-loader/lib/bootstrap.loader?extractStyles=true!bootstrap-loader/no-op.js');
+require('bootstrap/dist/css/bootstrap.css');
+require('bootstrap/dist/js/bootstrap.js');
 
 // Bootstrap File插件
 require('bootstrap-filestyle');

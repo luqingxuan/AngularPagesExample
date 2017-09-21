@@ -1,22 +1,12 @@
-const developmentEnv = require('./env.json').development;
-
-// 域名
-const webServerDomain = developmentEnv.domain;
-
-// 端口
-const webServerPort = developmentEnv.port;
-
-// 后台API服务器
-const apiServer = developmentEnv.apiServer;
-
-const extend = require('extend');
+const Env = require('./env.json')[process.env.NODE_ENV];
 
 const webpack = require('webpack');
 
-const config = extend(true, {}, require('./webpack.common.config.js'));
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-config.module = config.module || {};
-config.module.rules = config.module.rules || [];
+const IsProduct = process.env.NODE_ENV === 'production';
+
+const config = require('./webpack.common.config.js');
 
 config.module.rules.push({
     test: /\.tsx?$/,
@@ -24,26 +14,33 @@ config.module.rules.push({
     use: ['ts-loader']
 });
 
-config.plugins = config.plugins || [];
-
-// webpack-dev-server enhancement plugins
-config.plugins.push(new(require('webpack-dashboard/plugin'))());
-config.plugins.push(new webpack.NamedModulesPlugin());
-config.plugins.push(new webpack.HotModuleReplacementPlugin());
-
 // inject env
-config.plugins.push(
-    new webpack.DefinePlugin({
-        'process.env': {
-            'NODE_ENV': JSON.stringify('development'),
-            'API_SERVER': JSON.stringify(apiServer)
-        }
-    })
-);
+config.plugins.push(new webpack.DefinePlugin({
+    'process.env.API_SERVER': JSON.stringify(Env.apiServer)
+}));
+
+for (var key in (IsProduct ? {} : config.entry)) {
+    if (!config.entry.hasOwnProperty(key))
+        continue;
+
+    if (!(config.entry[key] instanceof Array))
+        config.entry[key] = [config.entry[key]];
+
+    // 按照官网说法，命令行--hot即可实现此步功能
+    // 但是如果通过Node.js API new WebpackDevServer的方式创建，就需要手动添加了
+    // 如果在命令行添加了--hot参数，此处可删除，测试过
+    // bundle the client for hot reloading, only- means to only hot reload for successful updates
+    //config.entry[key].unshift('webpack/hot/only-dev-server');
+
+    // 按照官网说法，命令行--inline或者devServer配置inline：true即可实现此步功能
+    // 但是如果通过Node.js API new WebpackDevServer的方式创建，不存在inline参数，就需要手动添加了
+    // 如果在命令行添加了--inline参数，此处可删除，测试过
+    // config.entry[key].unshift('webpack-dev-server/client/?http://' + Env.devHost + ':' + Env.devPort);
+}
 
 // api proxy for develop
-config.devServer.proxy = developmentEnv.apiProxy;
+config.devServer.proxy = Env.devProxy;
 
-config.devtool = 'source-map';
+config.devtool = IsProduct ? 'cheap-module-source-map' : 'source-map';
 
 module.exports = config;

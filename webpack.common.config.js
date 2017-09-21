@@ -1,9 +1,12 @@
 const path = require('path');
 
+const IsProduct = process.env.NODE_ENV === 'production';
+
 const {
     entries,
-    commonChunks
-} = require('./src/js/entries/index.js');
+    pageEntries,
+    commonEntries
+} = require('./webpack.entry.js');
 
 module.exports = {
     context: __dirname,
@@ -11,19 +14,12 @@ module.exports = {
     output: {
         // 添加http访问上下文路径
         publicPath: '/',
-        // 生成文件放到assets目录下的js文件夹
-        filename: './assets/js/[name].js',
         path: path.resolve(__dirname, './dist'),
+        // 生成文件放到assets目录下的js文件夹
+        filename: IsProduct ? 'assets/js/[name].[chunkhash:8].js' : 'assets/js/[name].js',
+        chunkFilename: IsProduct ? 'assets/js/[name].[chunkhash:8].js' : 'assets/js/[name].js'
     },
-    plugins: [
-        new(require('extract-text-webpack-plugin'))({ // 提取公用CSS
-            filename: './assets/css/[name].css'
-        }),
-        new(require('webpack/lib/optimize/CommonsChunkPlugin'))({ // 注意逆序
-            name: commonChunks.reverse(),
-            minChunks: Infinity
-        })
-    ],
+    plugins: require('./webpack.plugins.js')(commonEntries, pageEntries),
     module: {
         rules: require('./webpack.loaders.js')
     },
@@ -33,7 +29,7 @@ module.exports = {
             path.join(__dirname, 'node_modules')
         ],
         // 自动扩展文件后缀名，意味着我们require模块可以省略不写后缀名
-        extensions: ['.js', '.ts', 'tsx'],
+        extensions: ['.js', 'jsx', '.ts', 'tsx', 'vue'],
         // 模块别名定义，方便后续直接引用别名，无须多写长长的地址
         alias: require('./webpack.alias.js')
     },
@@ -44,30 +40,7 @@ module.exports = {
         // 'jquery' : 'jQuery'
         // moment: true
     },
-    devServer: {
-        publicPath: '/',
-        contentBase: path.resolve(__dirname, './dist'),
-        historyApiFallback: false,
-        // Set this if you want to enable gzip compression for assets
-        compress: true,
-        // webpack-dev-middleware options
-        // quiet: false,
-        // noInfo: false,
-        lazy: false,
-        stats: {
-            colors: true
-        },
-        watchOptions: {
-            poll: true,
-            aggregateTimeout: 300,
-            ignored: /node_modules/
-        },
-        headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,OPTIONS',
-            'Access-Control-Allow-Headers': 'Content-Type'
-        },
-    },
+    devServer: require('./webpack.devServer.js'),
     node: {
         global: true,
         process: true,
