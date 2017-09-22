@@ -36,6 +36,9 @@ function make(commonEntries, pageEntries) {
     // 必须是二选一，不能同时配置
     // !IsProduct && plugins.push(new webpack.HotModuleReplacementPlugin());
 
+    // 避免发出包含错误的模块
+    !IsProduct && plugins.push(new webpack.NoEmitOnErrorsPlugin());
+
     plugins.push.apply(plugins, require('./webpack.html.js')(commonEntries, pageEntries));
 
     // create module id
