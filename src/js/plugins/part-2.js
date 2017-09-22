@@ -9,3 +9,9 @@ require('css/lib/google/css/google.css');
 
 // font-awesome font
 require('font-awesome/css/font-awesome.css');
+
+require('device.js')
+
+require('accounting');
+
+require('jstorage');

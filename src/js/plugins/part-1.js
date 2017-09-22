@@ -1,3 +1,9 @@
+// animate css
+require('animate.css');
+
+// hover css
+require('hover.css/css/hover.css');
+
 require('bootstrap/dist/css/bootstrap.css');
 require('bootstrap/dist/js/bootstrap.js');
 

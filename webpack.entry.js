@@ -12,8 +12,11 @@ var polyfillEntries = [{
 
 // plugins
 var pluginEntries = [{
-    id: 'plugins',
-    contains: ['./src/js/plugins/index.js']
+    id: 'plugins/part-1',
+    contains: ['./src/js/plugins/part-1.js']
+}, {
+    id: 'plugins/part-2',
+    contains: ['./src/js/plugins/part-2.js']
 }];
 
 // ------------------------------------------------------------------------------
