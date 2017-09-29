@@ -10,8 +10,8 @@ const config = require('./webpack.common.config.js');
 
 config.module.rules.push({
     test: /\.tsx?$/,
-    exclude: /node_modules/,
-    use: ['ts-loader']
+    use: ['ts-loader'],
+    exclude: /node_modules/
 });
 
 // inject env
